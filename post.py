@@ -1,10 +1,9 @@
 import os
 import re
-import shutil
 import requests
 from time import sleep
 from config import TELEGRAM_KEY, CHAT_ID
-from utils import read_json, write_json
+from utils import read_json, write_json, remove_directory
 
 def parse_filename_for_time(filename: str) -> str | None:
     match = re.search(r'_time_(\d+)m(\d+)s(\d+)ms', filename)
@@ -24,25 +23,20 @@ def post_image(file_path: str, caption: str) -> bool:
     res = req.json()
     return res.get("ok", False)
 
-def remove_directory(directory_path: str) -> None:
-    try:
-        shutil.rmtree(directory_path)
-        print(f"Directory {directory_path} removed successfully.")
-    except Exception as e:
-        print(f"Failed to remove directory: {e}")
-
-def process_image(data_frame: list[dict], dictionary: dict, data_json_path: str) -> list[dict]:
+def process_image(data_frame: dict, dictionary: dict, data_json_path: str) -> None:
     timestamp = parse_filename_for_time(dictionary.get('path', ''))
-    caption = f"Frame {dictionary.get('frame', 0)} - Timestamp {timestamp} - Framerate 12"
+    fps = data_frame["fps"]
+    frame_len = len(data_frame.get("frames", []))
+    
+    caption = f"Frame {dictionary.get('frame', 0)} of {frame_len} - Timestamp {timestamp} - Framerate {fps}"
 
     if post_image(dictionary.get('path', ''), caption):
         print(f"Image {dictionary.get('path', '')} successfully posted.")
         os.remove(dictionary.get('path', ''))
-        data_frame.remove(dictionary)
+        data_frame["frames"].remove(dictionary)
         write_json(data_json_path, data_frame)
         print(f"Image {dictionary.get('path', '')} successfully deleted.")
-
-    return data_frame
+    
 
 def post_images(foldername: str) -> None:
     if not os.path.exists(foldername):
@@ -56,14 +50,13 @@ def post_images(foldername: str) -> None:
         return
 
     data_frame = read_json(data_json_path)
-
-    total_sending = 1
-
-    for dictionary in data_frame:
-        data_frame = process_image(data_frame, dictionary, data_json_path)
-        if total_sending >= 40:
-            total_sending = 1
-            sleep(60)
-        else:
-            total_sending += 1
-            sleep(10)
+    
+    print(data_frame["frames"])
+    
+    for dictionary in data_frame["frames"]:
+        frame = dictionary["frame"]
+        print(f"Frame of {frame}")
+        process_image(data_frame, dictionary, data_json_path)
+        data_frame = read_json(data_json_path)
+        
+        sleep(10)

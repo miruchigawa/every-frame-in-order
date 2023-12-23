@@ -6,6 +6,11 @@ def select_export() -> None:
     filename = input("Enter filename: ")
     outdir = input("Enter output directory path: ")
 
+    try:
+        max_fps = int(input("Max fps (default: 12): "))
+    except ValueError:
+        max_fps = 12
+
     if not filename or filename.isspace():
         print("Please input the filename of the video!")
         return
@@ -14,7 +19,7 @@ def select_export() -> None:
         print("Please input the output directory!")
         return
 
-    export_frame(filename, outdir)
+    export_frame(filename, outdir, max_fps)
 
 def select_post() -> None:
     foldername = input("Enter directory folder: ")
@@ -27,13 +32,13 @@ def select_post() -> None:
 
 def main() -> None:
     while True:
-        choice = input("Select 'export', 'post', or 'exit': ")
+        choice = input("Select 'export', 'post', or 'exit': ").lower()
 
-        if choice.lower() == "export":
+        if choice == "export":
             select_export()
-        elif choice.lower() == "post":
+        elif choice == "post":
             select_post()
-        elif choice.lower() == "exit":
+        elif choice == "exit":
             break
         else:
             print("Input not found in the list.")
