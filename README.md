@@ -2,7 +2,7 @@
 
 <img src="wataten.jpeg" width="150px" align="right" />
 
-This code utilizes moviepy and pillow to automatically post Every Wataten frame in order to a Telegram group. Please note that this program only posts photos to a Telegram group or channel, and it does not support posting to platforms like Facebook (I have a skill issue in setting up configuration to the meta API).
+This code utilizes moviepy and pillow to automatically post Every Wataten frame to a Telegram group. Please note that this program only posts photos to a Telegram group or channel, and it does not support posting to platforms like Facebook (I have a skill issue in setting up configuration to the meta API).
 
 
 
