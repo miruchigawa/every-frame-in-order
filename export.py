@@ -14,9 +14,8 @@ def export_frame(filepath: str, outdir: str, target_fps: int=12) -> None:
     os.makedirs(outdir)
     
     clip = VideoFileClip(filepath)
-    data_frame_path = os.path.join(outdir, "data.json")
+    data_frame_path = os.path.join(outdir, "frame.json")
     data_frame = read_json(data_frame_path)
-    data_frame["fps"] = target_fps
 
     total_frames = int(clip.fps * clip.duration)
     frames_to_skip = int(clip.fps / target_fps)
@@ -34,8 +33,8 @@ def export_frame(filepath: str, outdir: str, target_fps: int=12) -> None:
         
         filename = f"frame_{frame_number}_time_{duration_minutes:02d}m{duration_seconds:02d}s{duration_ms:03d}ms.png"
         
-        new_dict = {'frame': frame_number, 'path': os.path.join(outdir, filename)}
-        data_frame["frames"].append(new_dict)
+        new_dict = {'frame': frame_number, 'path': os.path.join(outdir, filename), 'max': target_fps}
+        data_frame.append(new_dict)
         write_json(data_frame_path, data_frame)
         
         save_image(os.path.join(outdir, filename), frame, i, total_frames, duration_minutes, duration_seconds, duration_ms)

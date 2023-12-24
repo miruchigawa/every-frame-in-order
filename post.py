@@ -25,38 +25,35 @@ def post_image(file_path: str, caption: str) -> bool:
 
 def process_image(data_frame: dict, dictionary: dict, data_json_path: str) -> None:
     timestamp = parse_filename_for_time(dictionary.get('path', ''))
-    fps = data_frame["fps"]
-    frame_len = len(data_frame.get("frames", []))
+    fps = dictionary.get('max', 0)
+    max_frame = max(entry.get('frame', 0) for entry in data_frame)
     
-    caption = f"Frame {dictionary.get('frame', 0)} of {frame_len} - Timestamp {timestamp} - Framerate {fps}"
+    caption = f"Frame {dictionary.get('frame', 0)} of {max_frame} - Timestamp {timestamp} - Max Framerate {fps}FPS"
 
     if post_image(dictionary.get('path', ''), caption):
         print(f"Image {dictionary.get('path', '')} successfully posted.")
         os.remove(dictionary.get('path', ''))
-        data_frame["frames"].remove(dictionary)
+        data_frame.remove(dictionary)
         write_json(data_json_path, data_frame)
         print(f"Image {dictionary.get('path', '')} successfully deleted.")
-    
 
 def post_images(foldername: str) -> None:
     if not os.path.exists(foldername):
         print("Folder not found!")
         return
 
-    data_json_path = os.path.join(foldername, "data.json")
+    data_json_path = os.path.join(foldername, "frame.json")
     if not os.path.exists(data_json_path):
-        print("data.json not found. Please export again.")
+        print("frame.json not found. Please export again.")
         remove_directory(foldername)
         return
 
     data_frame = read_json(data_json_path)
+    data_frame_copy = data_frame.copy() 
     
-    print(data_frame["frames"])
-    
-    for dictionary in data_frame["frames"]:
-        frame = dictionary["frame"]
-        print(f"Frame of {frame}")
+    for dictionary in data_frame_copy:
         process_image(data_frame, dictionary, data_json_path)
         data_frame = read_json(data_json_path)
-        
         sleep(10)
+        
+    remove_directory(foldername)

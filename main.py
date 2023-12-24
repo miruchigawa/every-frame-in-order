@@ -44,4 +44,7 @@ def main() -> None:
             print("Input not found in the list.")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Program exited.")
