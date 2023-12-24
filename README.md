@@ -2,9 +2,9 @@
 
 <img src="wataten.jpeg" width="150px" align="right" />
 
-This code utilizes moviepy and pillow to automatically post Every Wataten frame to a Telegram group. Please note that this program only posts photos to a Telegram group or channel, and it does not support posting to platforms like Facebook (I have a skill issue in setting up configuration to the meta API).
+This code utilizes MoviePy and Pillow to automatically post every Wataten frame to a Telegram group or Facebook page. ~~Please note that this program only posts photos to a Telegram group or channel, and it now supports posting to platforms like Facebook (previously, there was a skill issue in setting up configuration to the meta API).~~ Now supported both
 
-
+[日本語](ja.md)
 
 # Setup Instructions
 1. Clone this project with
@@ -31,3 +31,6 @@ This code utilizes moviepy and pillow to automatically post Every Wataten frame 
 - [ ] Support for rating branches/votes
 - [ ] Automatic cron job
 - [x] Support channel
+- [x] Added supported Facebook method
+
+If you have any questions, please chat with me on Facebook: [me](https://www.facebook.com/mirudev.jp)

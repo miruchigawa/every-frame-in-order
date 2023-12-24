@@ -2,6 +2,7 @@ import os
 from export import export_frame
 from post import post_images
 
+
 def select_export() -> None:
     filename = input("Enter filename: ")
     outdir = input("Enter output directory path: ")
@@ -19,16 +20,24 @@ def select_export() -> None:
         print("Please input the output directory!")
         return
 
-    export_frame(filename, outdir, max_fps)
+    export_frame(filename, outdir, max_fps, method)
+
 
 def select_post() -> None:
     foldername = input("Enter directory folder: ")
+    method = input("Select method 'telegram' or 'facebook': ")
 
     if not foldername or foldername.isspace():
         print("Please enter foldername!")
         return
 
-    post_images(foldername)
+    if not method or method.isspace():
+        method = "telegram"
+    else:
+        method = method.lower()
+
+    post_images(foldername, method)
+
 
 def main() -> None:
     while True:
@@ -42,6 +51,7 @@ def main() -> None:
             break
         else:
             print("Input not found in the list.")
+
 
 if __name__ == "__main__":
     try:

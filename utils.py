@@ -2,11 +2,12 @@ import json
 import os
 import shutil
 
+
 def read_json(filename: str) -> list[dict]:
     if not os.path.exists(filename):
         return []
 
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         try:
             data = json.load(file)
         except json.JSONDecodeError:
@@ -14,10 +15,12 @@ def read_json(filename: str) -> list[dict]:
 
     return data
 
+
 def write_json(filename: str, data: list[dict]) -> None:
-    with open(filename, 'w') as file:
+    with open(filename, "w") as file:
         json.dump(data, file, indent=2)
-        
+
+
 def remove_directory(directory_path: str) -> None:
     try:
         shutil.rmtree(directory_path)
