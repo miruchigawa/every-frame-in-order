@@ -47,8 +47,9 @@ def process_image(
     timestamp = parse_filename_for_time(dictionary.get("path", ""))
     fps = dictionary.get("max", 0)
     max_frame = max(entry.get("frame", 0) for entry in data_frame)
+    info = dictionary.get("info", "No Info")
 
-    caption = f"Frame {dictionary.get('frame', 0)} of {max_frame} - Timestamp {timestamp} - Max Framerate {fps}FPS"
+    caption = f"[{info}] Frame {dictionary.get('frame', 0)} of {max_frame} - Timestamp {timestamp} - Framerate {fps}FPS"
     if (
         post_image_telegram(dictionary.get("path", ""), caption)
         if method == "telegram"

@@ -1,8 +1,17 @@
 import os
+import re
 from PIL import Image
 from moviepy.editor import VideoFileClip
 from utils import read_json, write_json, remove_directory
 
+def parse_info(filename: str) -> str:
+    match = re.search(r"s(\d+)-eps(\d+)", filename)
+    
+    if match:
+        season, episode = match.group()
+        return f"Season {season} Episode {episode}"
+    else:
+        return "Season 0 Episode 0"
 
 def export_frame(filepath: str, outdir: str, target_fps: int = 12) -> None:
     if not os.path.exists(filepath):
@@ -35,6 +44,7 @@ def export_frame(filepath: str, outdir: str, target_fps: int = 12) -> None:
         filename = f"frame_{frame_number}_time_{duration_minutes:02d}m{duration_seconds:02d}s{duration_ms:03d}ms.png"
 
         new_dict = {
+            "info": parse_info(filename),
             "frame": frame_number,
             "path": os.path.join(outdir, filename),
             "max": target_fps,

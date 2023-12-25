@@ -20,7 +20,7 @@ def select_export() -> None:
         print("Please input the output directory!")
         return
 
-    export_frame(filename, outdir, max_fps, method)
+    export_frame(filename, outdir, max_fps)
 
 
 def select_post() -> None:
